@@ -1,0 +1,327 @@
+<html lang="en">
+    
+<head>
+    <title> Maths Game</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,user-scalable=yes">
+    <style>
+    html{
+    height: 100%;
+    background: radial-gradient(circle,white,grey);
+}
+#container{
+    height: 400px;
+    width: 550px;
+    background-color:aqua;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 4px 0x 0px 0px blue;
+    position: relative;
+}
+#score{
+    background-color: yellow;
+    color: blueviolet;
+    padding: 5px;
+    position: absolute;
+    left: 500px;
+    box-shadow: 0px 4px 0px 0px rgba( 14, 11, 11, 0.529 );
+   
+}
+#correct{
+    position: absolute;
+    left: 250px;
+    background-color: chartreuse;
+    color: white;
+    padding: 11px;
+    border-radius: 10px;
+    display: none;
+}
+#wrong{
+    position: absolute;
+    left: 250px;
+    background-color: red;
+    color: white;
+    padding: 11px;
+    border-radius: 10px;
+    display: none;
+    
+}
+#question{
+    width: 450px;
+    height: 150px;
+    margin: 50px auto 10px auto;
+    background-color: blueviolet;
+    box-shadow: 0px 4px ;
+    font-size: 100px;
+    text-align: center;
+    font-family: cursive, sans-serif;
+    color: black;
+}
+#instruction{
+    width: 450px;
+    height: 50px;
+    background-color: cornflowerblue;
+    margin: 10px auto ;
+    text-align: center;
+    line-height: 45px;
+    box-shadow: 0px 4px;
+}
+#choices{
+    height: 100px;
+    width: 450px;
+    margin: 5px auto;
+    
+    
+    
+}
+
+.box{
+    width: 85px;
+    height: 85px;
+    background-color: whitesmoke;
+    float: left;
+    margin-right: 36px;
+    border-radius: 2px;
+    cursor: pointer;
+    box-shadow: 0px 4px;
+    text-align: center;
+    line-height: 80px;
+    
+    position: relative;
+    transition: all;
+    }
+#box4{
+    margin-right: 0;
+}
+.box:hover,#startreset:hover,#end:hover{
+    background-color: wheat;
+    color: black;
+    box-shadow: 0px 4px;
+}
+.box:active,#startreset:active{
+    box-shadow:0px 0px ;
+    top:4px;
+    
+}
+#startreset{
+     width: 80px;
+    padding: 10px;
+    background-color:aquamarine;
+    margin: 0 auto;
+    border-radius: 3px;
+    cursor: pointer;
+    box-shadow: 0px 4px;
+    text-align: center;
+    position: relative;
+}
+#end{
+      width: 80px;
+    padding: 10px;
+    position: absolute;
+    top:395px;
+    background-color:aquamarine;
+    border-radius: 3px;
+    box-shadow: 0px 4px;
+    
+    
+
+}
+#timeremaining{
+    width: 150px;
+    padding: 10px;
+    position: absolute;
+    top:395px;
+    left: 400px;
+    background-color: chocolate;
+    border-radius: 3px;
+    box-shadow: 0px 4px;
+   // visibility: hidden;
+    display: none;
+
+    
+}
+#gameover{
+    height: 200px;
+    width: 500px;
+    background-color: tomato;
+    color: cornsilk;
+    font-size:1cm;
+    text-align: center;
+    text-transform: uppercase;
+    position: absolute;
+    top: 100px;
+    left: 46px;
+   // z-index: 2;
+    display: none;
+}
+
+    </style>
+    
+    </head>
+    <body>
+        <div id ="container">
+        <div id="score">
+            
+            Score:<span id="scorevalue">0</span>
+            </div>
+            <div id="correct">
+            Correct
+            </div>
+            <div id="wrong">
+            Try Again
+            </div>
+            <div id="question">
+                Welcome
+            </div>
+            <div id="instruction">
+            Click the correct answer
+            </div>
+            <div id="choices">
+            <div id="box1" class="box"></div>
+                <div id="box2" class="box"></div>
+                <div id="box3" class="box"></div>
+                <div id="box4" class="box"></div>
+            </div>
+            <div id="startreset">
+            Start Game
+            </div>
+            <div id="end">
+            End Game
+            </div>
+            <div id="timeremaining">Time Remaining:<span id="timeremainingvalue">60</span>sec</div>
+            <div id="gameover">
+           
+            </div>
+        </div>
+        <script>
+var playing = false;
+var score=0;
+var action;
+var timeremaining;
+var correctanswer;
+//if we click on start rest HTMLButtonElement
+document.getElementById("startreset").onclick =
+    function () {
+    //if we are playing
+    if(playing == true){
+        location.reload();//reload the page
+    }
+    else{//if we are not playing
+        playing = true;
+        score = 0;
+    document.getElementById("scorevalue").innerHTML = score;
+      show("timeremaining");
+        timeremaining=60;
+        document.getElementById("timeremainingvalue").innerHTML=timeremaining;
+        hide("gameover");
+        document.getElementById("startreset").innerHTML="Reset Game";
+        
+       startcountdown(); 
+        
+        generateqa();
+        
+    }
+    
+}
+
+for(i=1;i<5;i++){
+    document.getElementById("box"+i).onclick=function(){
+    if(playing==true){
+
+    if(this.innerHTML==correctanswer){
+        score++;
+        document.getElementById("scorevalue").innerHTML=score;
+        hide("wrong");
+        show("correct");
+        setTimeout(function(){
+            hide("correct");
+        },1000);
+        generateqa();
+        
+    }else{
+         hide("correct");
+        show("wrong");
+        setTimeout(function(){
+            hide("correct");
+        },1000);
+    } 
+    }
+}
+}
+
+
+document.getElementById("end").onclick=function(){
+           show("gameover");
+            document.getElementById("gameover").innerHTML=
+                "<p>Game Over!</p><p>Your Score is "+score+".</p>";
+           hide("timeremaining");
+            hide("correct");
+            hide("wrong");
+            playing = false;
+            document.getElementById("startreset").innerHTML="Start Game";
+    
+}
+
+function startcountdown(){
+    action = setInterval(function(){
+       timeremaining--; 
+         document.getElementById("timeremainingvalue").innerHTML=timeremaining;
+        if(timeremaining==0){
+            clearInterval(action);
+            stopCountdown();
+           show("gameover");
+            document.getElementById("gameover").innerHTML=
+                "<p>Game Over!</p><p>Your Score is "+score+".</p>";
+           hide("timeremaining");
+            hide("correct");
+            hide("wrong");
+            playing = false;
+            document.getElementById("startreset").innerHTML="Start Game";
+            
+            
+        }
+    },1000);
+}
+function stopCountdown(){
+    clearInterval(action);
+}
+
+function hide(Id){
+    document.getElementById(Id).style.display="none";
+}
+function show(Id){
+    document.getElementById(Id).style.display="block";
+}
+
+
+function generateqa(){
+    var x=1+Math.round(19*Math.random());
+    var y=1+Math.round(9*Math.random());
+    correctanswer=x*y;
+    document.getElementById("question").innerHTML=x+"x"+y;
+    var correctposition=1+Math.round(3*Math.random());
+    document.getElementById("box"+correctposition).innerHTML=correctanswer;
+    var answers=[correctanswer];
+    
+    for(i=1;i<5;i++){
+        if(i!= correctposition){
+            var wronganswer;
+            
+        do{
+             wronganswer=(1+Math.round(9*Math.random()))*(1+Math.round(19*Math.random()));
+           
+                 
+        }while(answers.indexOf(wronganswer)>-1)
+               
+          document.getElementById("box"+i).innerHTML=wronganswer;  
+            answers.push(wronganswer);
+        }
+    }
+    
+}
+        </script>
+        
+    </body>
+</html>
